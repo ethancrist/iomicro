@@ -1,0 +1,31 @@
+{
+  "name": "microservice",
+  "version": "1.0.0",
+  "description": "A simple, powerful way to create microservices in node.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethancrist/microservice.git"
+  },
+  "keywords": [
+    "microservice",
+    "micro",
+    "service",
+    "library"
+  ],
+  "author": "ethancrist",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ethancrist/microservice/issues"
+  },
+  "homepage": "https://github.com/ethancrist/microservice#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-dot-engine": "^1.0.7",
+    "simple-node-logger": "^0.93.33"
+  }
+}
