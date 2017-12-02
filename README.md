@@ -6,12 +6,6 @@ A simple, powerful way to create microservices in node.
 ```
 npm install microservice
 ```
-#### Active libaries used
-* ###### [express](https://www.npmjs.com/package/express) (latest)
-* ###### [body-parser](https://www.npmjs.com/package/body-parser) (latest)
-* ###### [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)
-* ###### [simple-node-logger](https://www.npmjs.com/package/simple-node-logger)
-
 ## Complete example
 The real beauty behind this library is the ability to set up microservices very quickly, without having to redefine the redundant setup parts of the app.
 ```javascript
@@ -45,6 +39,7 @@ micro.get('/api/users', { private: true }, (req, res) => {
 micro.post('apps/app', (req, res) => {
     res.send('You posted: '+req.body)
 });
+```
 
 ### Logging
 All logging timestamps use the timezone native to your system.
@@ -59,3 +54,13 @@ Outputs in the console and in the file ```logs/<YYYY>-<MM>-<DD>.log``` as
 ```javascript
 micro.log('Something bad happened :(', 'error');
 ```
+
+<hr>
+
+#### Active libaries used
+###### [express](https://www.npmjs.com/package/express) (latest)
+###### [body-parser](https://www.npmjs.com/package/body-parser) (latest)
+###### [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)
+###### [simple-node-logger](https://www.npmjs.com/package/simple-node-logger)
+
+
