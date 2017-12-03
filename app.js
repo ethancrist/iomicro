@@ -32,7 +32,8 @@ app.use(function(req, res, next) {
     if (!log.ready) return next();
 
     var user = {
-        ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
+        //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
+        ip: req.clientIp,
         post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
     };
 
@@ -109,9 +110,11 @@ function listen(port, options) {
 }
 
 module.exports = {
+    // simple-node-logger
     log: log.info,
+    error: log.error,
 
-    // Express
+    // express
     get: endpoint.get,
     post: endpoint.post,
     put: endpoint.put,
