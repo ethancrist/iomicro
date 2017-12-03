@@ -23,5 +23,17 @@
   },
   "homepage": "https://github.com/ethancrist/iomicro#readme",
   "dependencies": {
-  }
+    "body-parser": "file:body-parser",
+    "express": "^4.16.2",
+    "express-dot-engine": "^1.0.7",
+    "request-ip": "file:request-ip",
+    "simple-node-logger": "file:simple-node-logger"
+  },
+  "bundledDependencies": [
+    "body-parser",
+    "express",
+    "express-dot-engine",
+    "request-ip",
+    "simple-node-logger"
+  ]
 }
