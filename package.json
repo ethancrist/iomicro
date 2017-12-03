@@ -1,6 +1,6 @@
 {
   "name": "iomicro",
-  "version": "1.0.0",
+  "version": "1.0.15",
   "description": "A simple, powerful way to create microservices in node.",
   "main": "app.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ethancrist/microservice.git"
+    "url": "git+https://github.com/ethancrist/iomicro.git"
   },
   "keywords": [
     "microservice",
@@ -26,6 +26,7 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-dot-engine": "^1.0.7",
+    "request-ip": "^2.0.2",
     "simple-node-logger": "^0.93.33"
   }
 }
