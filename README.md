@@ -6,28 +6,63 @@ A simple, powerful way to create microservices in node.
 ```
 npm install microservice
 ```
-## Complete example
+Complete example
+------
+
 The real beauty behind this library is the ability to set up microservices very quickly, without having to redefine the redundant setup parts of the app.
 ```javascript
 const micro = require('microservice');
 
-micro.get('/', (req, res) => {
+micro.get('/', { private: true }, (req, res) => {
     res.render('home', { title: 'Home' });
 });
 
 micro.listen(3000, { appName: 'My App' hello: 'The app is now online.' }); 
 ```
-This tiny app will do the following:
+This tiny app will do all of the following:
 * Run an express app on port 3000
 * Log all requests responses to the console and a log file asynchronously 
-    * All logs are dumped to: ```log/<YYYY>-<MM>-<DD>.log```
+* Expose the URL *only* to users who pass an access key specified on startup
 * Render fast, dynamic pages using [dotJS](http://olado.github.io/doT)
 * JSONize POST request paramaters into ```req.body```
 
-## Usage
+Usage
+-----
+
+Now I will detail in much more depth the specs of the API.
+
 ```javascript
 const micro = require('microservice');
 ```
+
+<hr>
+
+### Options
+No options are required, and can be ommitted entirely as a parameter.
+
+#### Global
+```javascript
+micro.listen(3000, {
+    appName: 'Microservice', // The name of your app.
+    hello: 'The app is now online.' // The message logged when the app starts up.
+    logDir: 'log', // The relative folder the logs are dumped to.
+    viewDir: 'views', // The relative folder that res.render uses.
+    callback: function() {} // A custom function to be run on startup.
+});
+```
+
+#### Function
+TODO: Clean this up
+```javascript
+micro.get('/api/users', { private: true }, getUsers);
+```
+In order for ```private: true``` to work, pass through an access key on startup
+```javascript
+node app.js "myreallyreallyreallyreallylonghashedkey"
+```
+This ensures that no keys will be immediately visible anywhere in your codebase.
+
+<hr>
 
 ### Creating endpoints
 ```javascript
@@ -41,18 +76,40 @@ micro.post('apps/app', (req, res) => {
 });
 ```
 
+<hr>
+
 ### Logging
-All logging timestamps use the timezone native to your system.
+All logs are logged to the console and saved to ```<logDir>/<YYYY>-<MM>-<DD>.log```
+
+The timestamps on each line use the timezone native to your system.
+
+#### Automatic logs
+On app startup
+```
+19:01:24.366 INFO  [<appName>] <hello>
+```
+
+On every user request
+```
+18:55:44.148 INFO  [<appName>] GET / 127.0.0.1
+18:56:24.506 INFO  [<appName>] POST /register { "username": "foo", "password": "bar" } 127.0.0.1
+```
+
+#### Triggered logs
+```INFO``` logging
 ```javascript
 micro.log('Log this message please.');
 ```
-Outputs in the console and in the file ```logs/<YYYY>-<MM>-<DD>.log``` as
-```
-19:01:24.366 INFO  [<appName>] Log this message please.
+
+```ERROR``` logging
+```javascript
+micro.error('Something bad happened :(');
 ```
 
-```javascript
-micro.log('Something bad happened :(', 'error');
+Result in
+```
+19:01:24.366 INFO  [<appName>] Log this message please.
+19:01:24.366 ERROR  [<appName>] Something bad happened :(
 ```
 
 <hr>
@@ -62,5 +119,4 @@ micro.log('Something bad happened :(', 'error');
 ###### [body-parser](https://www.npmjs.com/package/body-parser) (latest)
 ###### [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)
 ###### [simple-node-logger](https://www.npmjs.com/package/simple-node-logger)
-
-
+###### [request-ip](https://www.npmjs.com/package/request-ip)
