@@ -92,26 +92,28 @@ Render the view ```login.dot``` in the ```<viewDir>``` folder
 res.render('login', req.body);
 ```
 
-**login.dot** (assuming ```req.body.username``` exists)
+login.dot (assuming ```req.body.username``` exists)
 ```javascript
 Welcome back, [[=model.username]].
 ```
+
 
 #### Partials
 ```javascript
 res.render('master');
 ```
 
-**master.dot**
+master.dot
 ```javascript
 Hello from master.dot!
 
 [[= partial('slave.dot') ]]  
 ```
-**slave.dot**
+slave.dot
 ```
 Hello from slave.dot
 ```
+
 
 All-around HTML, CSS, and JS syntax apply in these views.
 
