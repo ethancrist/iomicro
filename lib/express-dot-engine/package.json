@@ -1,0 +1,95 @@
+{
+  "_args": [
+    [
+      "express-dot-engine",
+      "/home/ethan/dev/microservice"
+    ]
+  ],
+  "_from": "express-dot-engine@latest",
+  "_id": "express-dot-engine@1.0.7",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/express-dot-engine",
+  "_nodeVersion": "0.12.7",
+  "_npmUser": {
+    "email": "danlevan@gmail.com",
+    "name": "danlevan"
+  },
+  "_npmVersion": "2.12.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "express-dot-engine",
+    "raw": "express-dot-engine",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/express-dot-engine/-/express-dot-engine-1.0.7.tgz",
+  "_shasum": "8552b7b040abd4637c923710c2cf832c25e6e2d4",
+  "_shrinkwrap": null,
+  "_spec": "express-dot-engine",
+  "_where": "/home/ethan/dev/microservice",
+  "author": {
+    "name": "Dan Le Van"
+  },
+  "bugs": {
+    "url": "https://github.com/danlevan/express-dot-engine/issues"
+  },
+  "contributors": "",
+  "dependencies": {
+    "dot": "^1.0.3",
+    "js-yaml": "^3.2.7",
+    "lodash": "^3.5.0"
+  },
+  "description": "Node.js engine using the ultra fast doT templating with support for layouts, partials and friendly for front-end web libraries (Angular, Ember, Backbone...)",
+  "devDependencies": {
+    "mocha": "^2.2.1",
+    "mock-fs": "^2.5.0",
+    "should": "^5.2.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "8552b7b040abd4637c923710c2cf832c25e6e2d4",
+    "tarball": "https://registry.npmjs.org/express-dot-engine/-/express-dot-engine-1.0.7.tgz"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "gitHead": "ec511905b97f17a5554d95949e089310f91ed53d",
+  "homepage": "https://github.com/danlevan/express-dot-engine",
+  "keywords": [
+    "doT",
+    "engine",
+    "express",
+    "template"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/danlevan/express-dot-engine/blob/master/LICENSE"
+    }
+  ],
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "danlevan",
+      "email": "danlevan@gmail.com"
+    }
+  ],
+  "name": "express-dot-engine",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/danlevan/express-dot-engine.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "1.0.7"
+}

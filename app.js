@@ -7,13 +7,13 @@
 'use strict';
 
 // [DEPENDENCIES]
-const app = require('express')();
-var log = require('simple-node-logger');
-const bodyParser = require('body-parser');
-const dots = require('express-dot-engine');
+const app = require('lib/express')();
+var log = require('lib/simple-node-logger');
+const bodyParser = require('lib/body-parser');
+const dots = require('lib/express-dot-engine');
 const path = require('path');
 const fs = require('fs');
-const requestIp = require('request-ip');
+const requestIp = require('lib/request-ip');
 
 // [OPTIONS]
 var config = {
