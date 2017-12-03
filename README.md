@@ -39,7 +39,7 @@ const micro = require('iomicro');
 ### Options
 No options are required, and can be ommitted entirely as a parameter.
 
-#### Global
+#### Global options
 ```javascript
 micro.listen(3000, {
     appName: 'Microservice', // The name of your app.
@@ -50,19 +50,18 @@ micro.listen(3000, {
 });
 ```
 
-#### Function
-TODO: Clean this up
+#### Function-specific options
 ```javascript
 micro.get('/api/users', { private: true }, getUsers);
 ```
-In order for ```private: true``` to work, pass through an access key on startup
+In order for ``` private: true ``` to work, pass through an access key on startup
 ```javascript
 node app.js "myreallyreallyreallyreallylonghashedkey"
 node api.js "Bearer eylajs9x1m.wpz0jcmqo9askdmzioenosjhmdow22~o0cj"
 ```
 This ensures that no keys will be immediately visible anywhere in your codebase.
 
-For the endpoints that have ```private: true``` it will then attempt to match said key with
+For the endpoints that have ``` private: true ``` it will then attempt to match said key with
 * The ```Authorization``` HTTP header, AKA ```req.headers.authorization```
 * User POST parameter ```authorization```, AKA ```req.body.authorization```
 
@@ -72,7 +71,7 @@ For the endpoints that have ```private: true``` it will then attempt to match sa
 ### Creating endpoints
 ```javascript
 micro.get('/api/users', { private: true }, (req, res) => {
-    res.json([{ username: 'user1' }]
+    res.json([{ username: 'user1' }])
 });
 ```
 ```javascript
