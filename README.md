@@ -1,17 +1,17 @@
 ![A microservice library for node.js](https://sto.narrownode.net/github/microservice.png)
-\<npm stats\>
+<npm stats\>
 
 A simple, powerful way to create microservices in node.
 
 ```
-npm install microservice
+npm install iomicro
 ```
 Complete example
 ------
 
 The real beauty behind this library is the ability to set up microservices very quickly, without having to redefine the redundant setup parts of the app.
 ```javascript
-const micro = require('microservice');
+const micro = require('iomicro');
 
 micro.get('/', { private: true }, (req, res) => {
     res.render('home', { title: 'Home' });
@@ -32,7 +32,7 @@ Usage
 Now I will detail in much more depth the specs of the API.
 
 ```javascript
-const micro = require('microservice');
+const micro = require('iomicro');
 ```
 
 <hr>
