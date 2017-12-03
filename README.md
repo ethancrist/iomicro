@@ -88,7 +88,7 @@ micro.post('apps/app', (req, res) => {
 
 #### Pass through variables
 Render the view ```login.dot``` in the ```<viewDir>``` folder
-````javascript
+```javascript
 res.render('login', req.body);
 ```
 
