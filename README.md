@@ -45,7 +45,7 @@ No options are required, and can be ommitted entirely as a parameter.
 micro.listen(3000, {
     appName: 'Microservice', // The name of your app.
     hello: 'The app is now online.' // The message logged when the app starts up.
-    logDir: 'log', // The relative folder the logs are dumped to.
+    logDir: 'logs', // The relative folder the logs are dumped to.
     viewDir: 'views', // The relative folder that res.render uses.
     callback: function() {} // A custom function to be run on startup.
 });
