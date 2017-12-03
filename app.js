@@ -111,8 +111,8 @@ function listen(port, options) {
 
 module.exports = {
     // simple-node-logger
-    log: function(message) { log.info(message) },
-    error: function(message) { log.error(message) },
+    log: function(message) { log.info('['+config.appName+'] '+message) },
+    error: function(message) { log.error('['+config.appName+'] '+message) },
 
     // express
     get: endpoint.get,
