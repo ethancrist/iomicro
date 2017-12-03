@@ -79,6 +79,7 @@ function request(method, url, options, callback) {
     // Calling this function here to access req, res, next 
     function callback(req, res, next) {
         if (options && options.private) checkAuth(req, res, next);
+        next();
     }
     
     if (method === 'GET') app.get(url, callback);
