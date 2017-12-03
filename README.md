@@ -21,7 +21,7 @@ micro.listen(3000, { appName: 'My App' hello: 'The app is now online.' });
 ```
 This tiny app will do all of the following:
 * Run an express app on port 3000
-* Log all requests responses to the console and a log file asynchronously 
+* Log all requests and responses to the console and a log file asynchronously 
 * Expose the URL *only* to users who pass an access key specified on startup
 * Render fast, dynamic pages using [dotJS](http://olado.github.io/doT)
 * JSONize POST request paramaters into ```req.body```
