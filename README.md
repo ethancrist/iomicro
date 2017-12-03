@@ -1,5 +1,4 @@
-![A microservice library for node.js](https://sto.narrownode.net/github/microservice.png)
-<npm stats\>
+![A microservice library for node.js](https://sto.narrownode.net/github/iomicro.png)
 
 A simple, powerful way to create microservices in node.
 
