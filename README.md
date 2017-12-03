@@ -59,9 +59,15 @@ micro.get('/api/users', { private: true }, getUsers);
 In order for ```private: true``` to work, pass through an access key on startup
 ```javascript
 node app.js "myreallyreallyreallyreallylonghashedkey"
+node api.js "Bearer eylajs9x1m.wpz0jcmqo9askdmzioenosjhmdow22~o0cj"
 ```
 This ensures that no keys will be immediately visible anywhere in your codebase.
 
+For the endpoints that have ```private: true``` it will then attempt to match said key with
+* The ```Authorization``` HTTP header, AKA ```req.headers.authorization```
+* User POST parameter ```authorization```, AKA ```req.body.authorization```
+
+###### I'm aware this feature is limited, and will likely add support for multiple or elastic keys in the future.
 <hr>
 
 ### Creating endpoints
@@ -109,7 +115,7 @@ micro.error('Something bad happened :(');
 Result in
 ```
 19:01:24.366 INFO  [<appName>] Log this message please.
-19:01:24.366 ERROR  [<appName>] Something bad happened :(
+19:01:24.994 ERROR  [<appName>] Something bad happened :(
 ```
 
 <hr>
