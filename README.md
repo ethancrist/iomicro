@@ -84,6 +84,41 @@ micro.post('apps/app', (req, res) => {
 
 <hr>
 
+### Creating views
+
+#### Pass through variables
+Render the view ```login.dot``` in the ```<viewDir>``` folder
+````javascript
+res.render('login', req.body);
+```
+
+**login.dot** (assuming ```req.body.username``` exists)
+```javascript
+Welcome back, [[=model.username]].
+```
+
+#### Partials
+```javascript
+res.render('master');
+```
+
+**master.dot**
+```javascript
+Hello from master.dot!
+
+[[= partial('slave.dot') ]]  
+```
+**slave.dot**
+```
+Hello from slave.dot
+```
+
+All-around HTML, CSS, and JS syntax apply in these views.
+
+###### For more, read: [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)
+
+<hr>
+
 ### Logging
 All logs are logged to the console and saved to ```<logDir>/<YYYY>-<MM>-<DD>.log```
 
