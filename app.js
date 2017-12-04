@@ -29,7 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(requestIp.mw());
 app.use(function(req, res, next) {
-    if (!log.ready) return next();
+    next();
+    if (!log.ready) return;
 
     var user = {
         //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
@@ -38,7 +39,6 @@ app.use(function(req, res, next) {
     };
 
     log.info('['+config.appName+'] '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
-    next()
 });
 
 
