@@ -44,11 +44,11 @@ app.use(function(req, res, next) {
 
 
 // [ESSENTIALS]
-function runBash(command) {
-    var response = '';
-    return exec(command, function(err, stdout, stderr) {
+function runBash(command, callback) {
+    var response = "";
+    exec(command, function(err, stdout, stderr) {
         err ? response =  err : response = stdout+stderr; 
-        return response
+        if (callback) callback(response);
     });
 }
 function initViewEngine() {
