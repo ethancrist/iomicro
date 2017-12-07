@@ -48,7 +48,7 @@ function runBash(command) {
     var response = '';
     exec(command, function(err, stdout, stderr) {
        err ? response =  err : response = stdout+stderror; 
-    }
+    });
     return response;
 }
 function initViewEngine() {
