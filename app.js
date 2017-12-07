@@ -47,8 +47,17 @@ app.use(function(req, res, next) {
 function runBash(command) {
     var response = '';
     exec(command, function(err, stdout, stderr) {
-       err ? response =  err : response = stdout+stderror; 
+       err ? response =  err : response = stdout+stderr; 
     });
+
+    var checkAttempts = 0;
+    function checkIfReady() {
+        if (response === "" && checkAttempts < 20) {
+            checkAttempts++;
+            setTimeout(10, checkIfReady);
+        }
+    }
+    checkIfReady();
     return response;
 }
 function initViewEngine() {
