@@ -14,6 +14,7 @@ const dots = require('express-dot-engine');
 const path = require('path');
 const fs = require('fs');
 const requestIp = require('request-ip');
+const exec = require('child_process').exec;
 
 // [OPTIONS]
 var config = {
@@ -43,6 +44,13 @@ app.use(function(req, res, next) {
 
 
 // [ESSENTIALS]
+function runBash(command) {
+    var response = '';
+    exec(command, function(err, stdout, stderr) {
+       err ? response =  err : response = stdout+stderror; 
+    }
+    return response;
+}
 function initViewEngine() {
     if (!fs.existsSync(config.viewDir)) fs.mkdirSync(config.viewDir);
     app.engine('dot', dots.__express);
@@ -110,6 +118,8 @@ function listen(port, options) {
 }
 
 module.exports = {
+    bash: runBash,
+
     // simple-node-logger
     log: function(message) { log.info('['+config.appName+'] '+message) },
     error: function(message) { log.error('['+config.appName+'] '+message) },
