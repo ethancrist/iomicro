@@ -91,7 +91,7 @@ function request(method, url, options, callback) {
                 case false:
                     return arguments[1].status(403).json({ message: 'Missing proper authorization.' });
                 case true:
-                    return orginal.apply(this, arguments);
+                    return original.apply(this, arguments);
             }
         }
     }
