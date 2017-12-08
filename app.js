@@ -94,7 +94,7 @@ function request(method, url, options, callback) {
     if (method === 'USE') app.use(url, callback);
 
     // Logging after response is sent
-    callback = function() {
+    logger = callback = function() {
         if (!log.ready) return;
 
         var user = {
@@ -105,6 +105,7 @@ function request(method, url, options, callback) {
 
         log.info('['+config.appName+'] '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
     }
+    logger();
 }
 var endpoint = {
     get: function (url, options, callback) { request('GET', url, options, callback) },
