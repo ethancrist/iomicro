@@ -31,6 +31,11 @@ app.use(bodyParser.json());
 app.use(requestIp.mw());
 
 // [ESSENTIALS]
+function prepare() {
+    initViewEngine();
+    initLogs();
+    app.ready = true;
+}
 function runBash(command, callback) {
     var response = "";
     exec(command, function(err, stdout, stderr) {
@@ -65,6 +70,8 @@ function checkAuth(req, res, next) {
     return req.headers.authorization === process.argv[2] || req.body.authorization === process.argv[2];
 }
 function request(method, url, options, callback) {
+    if (!app.ready) prepare();
+
     if (typeof(options) === 'function') {
         callback = options;
         options = null;
@@ -100,7 +107,7 @@ function request(method, url, options, callback) {
     if (method === 'USE') app.use(url, callback);
 
     // Logging after response is sent
-    if (!log.ready) return;
+    if (!log.ready) initLogs();
 
     var user = {
         //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
@@ -123,8 +130,6 @@ function listen(port, options) {
     
     config = Object.assign(config, options);
 
-    initViewEngine();
-    initLogs();
     log.info('['+config.appName+'] '+config.hello);
 
     app.listen(port, config.callback);
