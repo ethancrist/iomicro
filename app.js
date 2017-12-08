@@ -29,19 +29,6 @@ var config = {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(requestIp.mw());
-app.use(function(req, res, next) {
-    next();
-    if (!log.ready) return;
-
-    var user = {
-        //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
-        ip: req.clientIp,
-        post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
-    };
-
-    log.info('['+config.appName+'] '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
-});
-
 
 // [ESSENTIALS]
 function runBash(command, callback) {
@@ -73,7 +60,7 @@ function checkAuth(req, res, next) {
         var message = '[iomicro] ERROR: In order to use { private: true }, send an access key like so: \n'+
                       '         \'$ node app.js "reallyreallyreallyreallyreallyreallylonghashedkey"\'';
         log.error(message);
-        return -1;
+        return false;
     }
     return req.headers.authorization === process.argv[2] || req.body.authorization === process.argv[2];
 }
@@ -86,13 +73,17 @@ function request(method, url, options, callback) {
     var original = callback;
     if (options && options.private) {
         callback = function() {
-            switch (checkAuth(arguments[0], arguments[1], arguments[2])) {
-                case -1:
-                case false:
-                    return arguments[1].status(403).json({ message: 'Missing proper authorization.' });
-                case true:
-                    return original.apply(this, arguments);
-            }
+            var isAuthorized = checkAuth(arguments[0], arguments[1], arguments[2]);
+            if (!isAuthorized) arguments[1].status(403).json({ message: 'Missing proper authorization.' }); 
+
+            return original.apply(this, arguments);
+            //switch (checkAuth(arguments[0], arguments[1], arguments[2])) {
+                //case -1:
+                //case false:
+                    //return arguments[1].status(403).json({ message: 'Missing proper authorization.' });
+                //case true:
+                    //return original.apply(this, arguments);
+            //}
         }
     }
 
@@ -101,6 +92,19 @@ function request(method, url, options, callback) {
     if (method === 'PUT') app.put(url, callback);
     if (method === 'DELETE') app.delete(url, callback);
     if (method === 'USE') app.use(url, callback);
+
+    // Logging after response is sent
+    callback = function() {
+        if (!log.ready) return;
+
+        var user = {
+            //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
+            ip: req.clientIp,
+            post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
+        };
+
+        log.info('['+config.appName+'] '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
+    }
 }
 var endpoint = {
     get: function (url, options, callback) { request('GET', url, options, callback) },
