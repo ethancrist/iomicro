@@ -84,7 +84,7 @@ function request(method, url, options, callback) {
         callback = options;
         options = null;
 
-        log.info('[iomicro] DEBUG: callback: '+callback);
+        console.log('[iomicro] DEBUG: callback = '+callback);
     }
 
     // Calling this function here to access req, res, next 
