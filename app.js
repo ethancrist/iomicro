@@ -79,6 +79,7 @@ function logger(req, res) {
         post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
     };
 
+    console.log('hi');
     log.info('['+config.appName+'] '+res.statusCode+' '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
 }
 function request(method, url, options, callback) {
