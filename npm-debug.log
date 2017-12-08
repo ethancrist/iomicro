@@ -1,0 +1,106 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'publish' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/root/git/iomicro',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /root/.npm/iomicro/1.2.36/package.tgz not in flight; packing
+9 info lifecycle iomicro@1.2.36~prepublish: iomicro@1.2.36
+10 silly lifecycle iomicro@1.2.36~prepublish: no script for prepublish, continuing
+11 verbose tar pack [ '/root/.npm/iomicro/1.2.36/package.tgz', '/root/git/iomicro' ]
+12 verbose tarball /root/.npm/iomicro/1.2.36/package.tgz
+13 verbose folder /root/git/iomicro
+14 verbose addLocalTarball adding from inside cache /root/.npm/iomicro/1.2.36/package.tgz
+15 silly cache afterAdd iomicro@1.2.36
+16 verbose afterAdd /root/.npm/iomicro/1.2.36/package/package.json not in flight; writing
+17 verbose afterAdd /root/.npm/iomicro/1.2.36/package/package.json written
+18 silly publish { name: 'iomicro',
+18 silly publish   version: '1.2.36',
+18 silly publish   description: 'A simple, powerful way to create microservices in node.',
+18 silly publish   main: 'app.js',
+18 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/ethancrist/iomicro.git' },
+18 silly publish   keywords: [ 'microservice', 'micro', 'service', 'library' ],
+18 silly publish   author: { name: 'ethancrist' },
+18 silly publish   license: 'ISC',
+18 silly publish   bugs: { url: 'https://github.com/ethancrist/iomicro/issues' },
+18 silly publish   homepage: 'https://github.com/ethancrist/iomicro#readme',
+18 silly publish   dependencies:
+18 silly publish    { 'body-parser': '^1.18.2',
+18 silly publish      express: '^4.16.2',
+18 silly publish      'express-dot-engine': '^1.0.7',
+18 silly publish      'request-ip': '^2.0.2',
+18 silly publish      'simple-node-logger': '^0.93.33' },
+18 silly publish   readme: '![A microservice library for node.js](https://sto.narrownode.net/github/iomicro.png)\n\nA simple, powerful way to create microservices in node.\n\n```\nnpm install iomicro --save\n```\nI highly recommend automatically running ``` npm update ``` before starting your app as I frequently update this module. \n\nComplete example\n------\n\nThe real beauty behind this library is the ability to set up microservices very quickly, without having to redefine the redundant setup parts of the app.\n```javascript\nconst micro = require(\'iomicro\');\n\nmicro.get(\'/\', { private: true }, (req, res) => {\n    res.render(\'home\', { title: \'Home\' });\n});\n\nmicro.listen(3000, { appName: \'My App\' hello: \'The app is now online.\' }); \n```\nThis tiny app will do all of the following:\n* Run an express app on port 3000\n* Log all requests and responses to the console and a log file asynchronously \n* Expose the URL *only* to users who pass an access key specified on startup\n* Render fast, dynamic pages using [dotJS](http://olado.github.io/doT)\n* JSONize POST request paramaters into ```req.body```\n\nUsage\n-----\n\nNow I will detail in much more depth the specs of the API.\n\n```javascript\nconst micro = require(\'iomicro\');\n```\n\n<hr>\n\n### Options\nNo options are required, and can be ommitted entirely as a parameter.\n\n#### Global options\n```javascript\nmicro.listen(3000, {\n    appName: \'Microservice\', // The name of your app.\n    hello: \'The app is now online.\' // The message logged when the app starts up.\n    logDir: \'logs\', // The relative folder the logs are dumped to.\n    viewDir: \'views\', // The relative folder that res.render uses.\n    callback: function() {} // A custom function to be run on startup.\n});\n```\n\n#### Function-specific options\n```javascript\nmicro.get(\'/api/users\', { private: true }, getUsers);\n```\nIn order for ``` private: true ``` to work, pass through an access key on startup\n```javascript\nnode app.js "myreallyreallyreallyreallylonghashedkey"\nnode api.js "Bearer eylajs9x1m.wpz0jcmqo9askdmzioenosjhmdow22~o0cj"\n```\nThis ensures that no keys will be immediately visible anywhere in your codebase.\n\nFor the endpoints that have ``` private: true ``` it will then attempt to match said key with\n* The ```Authorization``` HTTP header, AKA ```req.headers.authorization```\n* User POST parameter ```authorization```, AKA ```req.body.authorization```\n\n###### I\'m aware this feature is limited, and will likely add support for multiple or elastic keys in the future.\n<hr>\n\n### Creating endpoints\n```javascript\nmicro.get(\'/api/users\', { private: true }, (req, res) => {\n    res.json([{ username: \'user1\' }])\n});\n```\n```javascript\nmicro.post(\'apps/app\', (req, res) => {\n    res.send(\'You posted: \'+req.body)\n});\n```\n\n<hr>\n\n### Creating views\n\n#### Pass through variables\nRender the view ```login.dot``` in the ```<viewDir>``` folder\n```javascript\nres.render(\'login\', req.body);\n```\n\nlogin.dot (assuming ```req.body.username``` exists)\n```javascript\nWelcome back, [[=model.username]].\n```\n\n\n#### Partials\n```javascript\nres.render(\'master\');\n```\n\nmaster.dot\n```javascript\nHello from master.dot!\n\n[[= partial(\'slave.dot\') ]]  \n```\nslave.dot\n```\nHello from slave.dot\n```\n\n\nAll-around HTML, CSS, and JS syntax apply in these views.\n\n###### For more, read: [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)\n\n<hr>\n\n### Logging\nAll logs are logged to the console and saved to ```<logDir>/<YYYY>-<MM>-<DD>.log```\n\nThe timestamps on each line use the timezone native to your system.\n\n#### Automatic logs\nOn app startup\n```\n19:01:24.366 INFO  [<appName>] <hello>\n```\n\nOn every user request\n```\n18:55:44.148 INFO  [<appName>] GET / 127.0.0.1\n18:56:24.506 INFO  [<appName>] POST /register { "username": "foo", "password": "bar" } 127.0.0.1\n```\n\n#### Triggered logs\n```INFO``` logging\n```javascript\nmicro.log(\'Log this message please.\');\n```\n\n```ERROR``` logging\n```javascript\nmicro.error(\'Something bad happened :(\');\n```\n\nResult in\n```\n19:01:24.366 INFO  [<appName>] Log this message please.\n19:01:24.994 ERROR  [<appName>] Something bad happened :(\n```\n\n<hr>\n\n#### Active libaries used\n###### [express](https://www.npmjs.com/package/express) (latest)\n###### [body-parser](https://www.npmjs.com/package/body-parser) (latest)\n###### [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)\n###### [simple-node-logger](https://www.npmjs.com/package/simple-node-logger)\n###### [request-ip](https://www.npmjs.com/package/request-ip)\n',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: '800111794ba4b072388cd7627e511ca4cd51709b',
+18 silly publish   bundleDependencies:
+18 silly publish    [ 'body-parser',
+18 silly publish      'express',
+18 silly publish      'express-dot-engine',
+18 silly publish      'request-ip',
+18 silly publish      'simple-node-logger' ],
+18 silly publish   _id: 'iomicro@1.2.36',
+18 silly publish   _shasum: 'cfba1e5814ec8819822708e423bd4c36bfb092af',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name iomicro
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/iomicro
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /root/.npm/iomicro/1.2.36/package.tgz
+26 verbose request uri https://registry.npmjs.org/iomicro
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 11:48:00 AM
+29 verbose request using bearer token for auth
+30 verbose request id ddcd35ff204ab062
+31 http request PUT https://registry.npmjs.org/iomicro
+32 http 403 https://registry.npmjs.org/iomicro
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=300',
+33 verbose headers   'content-length': '92',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Fri, 08 Dec 2017 11:48:02 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-ord1725-ORD',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1512733681.871631,VS0,VE1639',
+33 verbose headers   vary: 'Accept-Encoding, Accept' }
+34 verbose request invalidating /root/.npm/registry.npmjs.org/iomicro on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: You cannot publish over the previously published version 1.2.36. : iomicro
+36 verbose stack     at makeError (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at Request._callback (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+36 verbose stack     at Request.self.callback (/usr/share/npm/node_modules/request/request.js:198:22)
+36 verbose stack     at emitTwo (events.js:87:13)
+36 verbose stack     at Request.emit (events.js:172:7)
+36 verbose stack     at Request.<anonymous> (/usr/share/npm/node_modules/request/request.js:1082:10)
+36 verbose stack     at emitOne (events.js:82:20)
+36 verbose stack     at Request.emit (events.js:169:7)
+36 verbose stack     at IncomingMessage.<anonymous> (/usr/share/npm/node_modules/request/request.js:1009:12)
+37 verbose statusCode 403
+38 verbose pkgid iomicro
+39 verbose cwd /root/git/iomicro
+40 error Linux 4.4.0-81-generic
+41 error argv "/usr/bin/nodejs" "/usr/bin/npm" "publish"
+42 error node v4.2.6
+43 error npm  v3.5.2
+44 error code E403
+45 error You cannot publish over the previously published version 1.2.36. : iomicro
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]
