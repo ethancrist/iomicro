@@ -93,6 +93,8 @@ function request(method, url, options, callback) {
         devCallback();
     }
 
+    console.log(''+callback);
+
     if (method === 'GET') app.get(url, devCallback);
     if (method === 'POST') app.post(url, devCallback);
     if (method === 'PUT') app.put(url, devCallback);
