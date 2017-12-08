@@ -1,6 +1,6 @@
 {
   "name": "iomicro",
-  "version": "1.2.28",
+  "version": "1.2.29",
   "description": "A simple, powerful way to create microservices in node.",
   "main": "app.js",
   "scripts": {

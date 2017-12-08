@@ -68,7 +68,7 @@ function initLogs() {
 
     log.ready = true;
 }
-function checkAuth(req, res) {
+function checkAuth(req, res, next) {
     if (!process.argv[2]) {
         var message = '[iomicro] ERROR: In order to use { private: true }, send an access key like so: \n'+
                       '         \'$ node app.js "reallyreallyreallyreallyreallyreallylonghashedkey"\'';
