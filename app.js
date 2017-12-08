@@ -68,17 +68,14 @@ function initLogs() {
 
     log.ready = true;
 }
-function checkAuth(req, res, next) {
+function checkAuth(req, res) {
     if (!process.argv[2]) {
         var message = '[iomicro] ERROR: In order to use { private: true }, send an access key like so: \n'+
                       '         \'$ node app.js "reallyreallyreallyreallyreallyreallylonghashedkey"\'';
-        res.status(500).end(message);
-        return log.error(message);
+        log.error(message);
+        return -1;
     }
-    var noAuth = req && req.headers &&
-                 req.headers.authorization !== process.argv[2] && req.body.authorization !== process.argv[2];
-    if (noAuth) return res.status(403).json({ message: 'Missing proper authorization.' });
-    next();
+    return req.headers.authorization === process.argv[2] || req.body.authorization === process.arg[2];
 }
 function request(method, url, options, callback) {
     if (typeof(options) === 'function') {
@@ -87,8 +84,16 @@ function request(method, url, options, callback) {
     }
 
     var original = callback;
-    callback = function() {
-        return (options && options.private) ? checkAuth(arguments) : original.apply(this, arguments);
+    if (options && options.private) {
+        callback = function() {
+            switch (checkAuth(arguments)) {
+                case -1:
+                case false:
+                    return res.status(403).json({ message: 'Missing proper authorization.' });
+                case true:
+                    return orginal.apply(this, arguments);
+            }
+        }
     }
 
     if (method === 'GET') app.get(url, callback);
