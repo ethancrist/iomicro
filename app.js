@@ -75,7 +75,7 @@ function checkAuth(req, res, next) {
         log.error(message);
         return -1;
     }
-    return req.headers.authorization === process.argv[2] || req.body.authorization === process.arg[2];
+    return req.headers.authorization === process.argv[2] || req.body.authorization === process.argv[2];
 }
 function request(method, url, options, callback) {
     if (typeof(options) === 'function') {
