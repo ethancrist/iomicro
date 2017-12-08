@@ -75,7 +75,8 @@ function checkAuth(req, res, next) {
         res.status(500).end(message);
         return log.error(message);
     }
-    var noAuth = req.headers.authorization !== process.argv[2] && req.body.authorization !== process.argv[2];
+    var noAuth = req && req.headers &&
+                 req.headers.authorization !== process.argv[2] && req.body.authorization !== process.argv[2];
     if (noAuth) return res.status(403).json({ message: 'Missing proper authorization.' });
     next();
 }
