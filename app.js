@@ -83,8 +83,6 @@ function request(method, url, options, callback) {
     if (typeof(options) === 'function') {
         callback = options;
         options = null;
-
-        console.log('[iomicro] DEBUG: callback = '+callback);
     }
 
     // Calling this function here to access req, res, next 
@@ -92,7 +90,9 @@ function request(method, url, options, callback) {
         if (options && options.private) checkAuth(req, res, next);
         next();
     }
-    
+     
+    console.log('[iomicro] DEBUG: callback = '+callback);
+
     if (method === 'GET') app.get(url, callback);
     if (method === 'POST') app.post(url, callback);
     if (method === 'PUT') app.put(url, callback);
