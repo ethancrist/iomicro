@@ -79,7 +79,6 @@ function logger(req, res) {
         post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
     };
 
-    console.log('hi');
     log.info('['+config.appName+'] '+res.statusCode+' '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
 }
 function request(method, url, options, callback) {
@@ -97,22 +96,20 @@ function request(method, url, options, callback) {
     callback = function() {
         req = arguments[0], res = arguments[1];
 
+        // Set to developer response by default
+        var response = original.apply(this, arguments);
+
         if (options && options.private) {
             var isAuthorized = checkAuth(req, res);
-            if (!isAuthorized) return arguments[1].status(403).json({ message: 'Missing proper authorization.' }); 
+            if (!isAuthorized) response = arguments[1].status(403).json({ message: 'Missing proper authorization.' }); 
         }
 
-        logger(req, res);
+        var newCallback = function() {
+            logger(req, res);
+            response();
+        }
 
-        // User is authorized; continue as planned
-        return original.apply(this, arguments);
-        //switch (checkAuth(arguments[0], arguments[1], arguments[2])) {
-            //case -1:
-            //case false:
-                //return arguments[1].status(403).json({ message: 'Missing proper authorization.' });
-            //case true:
-                //return original.apply(this, arguments);
-        //}
+        return newCallback;
     }
 
     if (method === 'GET') app.get(url, callback);
