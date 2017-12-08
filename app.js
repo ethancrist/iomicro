@@ -88,7 +88,7 @@ function request(method, url, options, callback) {
 
     var original = callback;
     callback = function() {
-        (options && options.private) ? return checkAuth(arguments) : return original.apply(this, arguments);
+        return (options && options.private) ? checkAuth(arguments) : original.apply(this, arguments);
     }
 
     if (method === 'GET') app.get(url, callback);
