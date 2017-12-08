@@ -70,21 +70,27 @@ function request(method, url, options, callback) {
         options = null;
     }
 
+    var req, res;
+
+    // Custom middleware
     var original = callback;
-    if (options && options.private) {
-        callback = function() {
+    callback = function() {
+        req = arguments[0], res = arguments[1];
+
+        if (options && options.private) {
             var isAuthorized = checkAuth(arguments[0], arguments[1], arguments[2]);
             if (!isAuthorized) return arguments[1].status(403).json({ message: 'Missing proper authorization.' }); 
-
-            return original.apply(this, arguments);
-            //switch (checkAuth(arguments[0], arguments[1], arguments[2])) {
-                //case -1:
-                //case false:
-                    //return arguments[1].status(403).json({ message: 'Missing proper authorization.' });
-                //case true:
-                    //return original.apply(this, arguments);
-            //}
         }
+
+        // User is authorized; continue as planned
+        return original.apply(this, arguments);
+        //switch (checkAuth(arguments[0], arguments[1], arguments[2])) {
+            //case -1:
+            //case false:
+                //return arguments[1].status(403).json({ message: 'Missing proper authorization.' });
+            //case true:
+                //return original.apply(this, arguments);
+        //}
     }
 
     if (method === 'GET') app.get(url, callback);
@@ -94,18 +100,15 @@ function request(method, url, options, callback) {
     if (method === 'USE') app.use(url, callback);
 
     // Logging after response is sent
-    var logger = callback = function() {
-        if (!log.ready) return;
+    if (!log.ready) return;
 
-        var user = {
-            //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
-            ip: req.clientIp,
-            post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
-        };
+    var user = {
+        //ip: req.clientIp === '::1' ? '127.0.0.1' : req.client.Ip,
+        ip: req.clientIp,
+        post: Object.keys(req.body).length > 0 ? JSON.stringify(req.body)+' ' : ''
+    };
 
-        log.info('['+config.appName+'] '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
-    }
-    logger();
+    log.info('['+config.appName+'] '+res.statusCode+' '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
 }
 var endpoint = {
     get: function (url, options, callback) { request('GET', url, options, callback) },
