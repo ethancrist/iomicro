@@ -85,19 +85,19 @@ function request(method, url, options, callback) {
         options = null;
     }
 
+    var devCallback = callback;
+
     // Calling this function here to access req, res, next 
     function callback(req, res, next) {
         if (options && options.private) checkAuth(req, res, next);
         next();
     }
-     
-    console.log('[iomicro] DEBUG: callback = '+callback);
 
-    if (method === 'GET') app.get(url, callback);
-    if (method === 'POST') app.post(url, callback);
-    if (method === 'PUT') app.put(url, callback);
-    if (method === 'DELETE') app.delete(url, callback);
-    if (method === 'USE') app.use(url, callback);
+    if (method === 'GET') app.get(url, devCallback);
+    if (method === 'POST') app.post(url, devCallback);
+    if (method === 'PUT') app.put(url, devCallback);
+    if (method === 'DELETE') app.delete(url, devCallback);
+    if (method === 'USE') app.use(url, devCallback);
 }
 var endpoint = {
     get: function (url, options, callback) { request('GET', url, options, callback) },
