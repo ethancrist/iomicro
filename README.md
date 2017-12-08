@@ -3,8 +3,10 @@
 A simple, powerful way to create microservices in node.
 
 ```
-npm install iomicro
+npm install iomicro --save
 ```
+I highly recommend automatically running ``` npm update ``` before starting your app as I frequently update this module. 
+
 Complete example
 ------
 
