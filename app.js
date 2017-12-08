@@ -106,6 +106,7 @@ function request(method, url, options, callback) {
             if (!isAuthorized) response = denied;
         }
 
+        console.log(''+response);
         var newCallback = function() {
             logger(req, res);
             response();
