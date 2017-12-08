@@ -87,8 +87,7 @@ function request(method, url, options, callback) {
     if (options && options.private) {
         callback = function() {
             console.log(arguments);
-            console.log(typeof(arguments));
-            switch (checkAuth(arguments)) {
+            switch (checkAuth(arguments.1, arguments.2, arguments.3)) {
                 case -1:
                 case false:
                     return res.status(403).json({ message: 'Missing proper authorization.' });
