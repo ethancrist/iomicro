@@ -86,7 +86,8 @@ function request(method, url, options, callback) {
     var original = callback;
     if (options && options.private) {
         callback = function() {
-            console.log(JSON.stringify(arguments));
+            console.log(arguments);
+            console.log(typeof(arguments));
             switch (checkAuth(arguments)) {
                 case -1:
                 case false:
