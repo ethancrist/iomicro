@@ -94,7 +94,7 @@ function request(method, url, options, callback) {
     if (method === 'USE') app.use(url, callback);
 
     // Logging after response is sent
-    logger = callback = function() {
+    var logger = callback = function() {
         if (!log.ready) return;
 
         var user = {
