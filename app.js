@@ -69,7 +69,7 @@ function checkAuth(req, res) {
     }
     return req.headers.authorization === process.argv[2] || req.body.authorization === process.argv[2];
 }
-function logger(req, res)
+function logger(req, res) {
     // Logging after response is sent
     if (!log.ready) initLogs();
 
