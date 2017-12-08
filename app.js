@@ -100,8 +100,10 @@ function request(method, url, options, callback) {
         var response = original.apply(this, arguments);
 
         if (options && options.private) {
+            var denied = arguments[1].status(403).json({ message: 'Missing proper authorization.' }); 
             var isAuthorized = checkAuth(req, res);
-            if (!isAuthorized) response = arguments[1].status(403).json({ message: 'Missing proper authorization.' }); 
+
+            if (!isAuthorized) response = denied;
         }
 
         var newCallback = function() {
