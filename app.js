@@ -101,6 +101,7 @@ function request(method, url, options, callback) {
 
             if (!isAuthorized) {
                 res.status(403).json({ message:'Missing proper authorization.' });
+                logger(req, res);
                 return function(req, res) {};
             }
         }
