@@ -106,9 +106,10 @@ function request(method, url, options, callback) {
             }
         }
 
+        original.apply(this, arguments);
         logger(req, res);
 
-        return original.apply(this, arguments);
+        return function(req, res) {};
     }
     
     if (method === 'GET') app.get(url, callback);
