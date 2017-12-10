@@ -96,9 +96,6 @@ function request(method, url, options, callback) {
     callback = function() {
         req = arguments[0], res = arguments[1];
 
-        // Set to developer response by default
-        var response = original.apply(this, arguments);
-
         if (options && options.private) {
             var isAuthorized = checkAuth(req, res);
 
@@ -107,8 +104,7 @@ function request(method, url, options, callback) {
 
         logger(req, res);
 
-        console.log(''+JSON.stringify(response));
-        return response;
+        return original.apply(this, arguments);
     }
     
     if (method === 'GET') app.get(url, callback);
