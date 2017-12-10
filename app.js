@@ -107,10 +107,9 @@ function request(method, url, options, callback) {
 
         logger(req, res);
 
+        console.log(''+response);
         return response;
     }
-
-    console.log(''+callback);
     
     if (method === 'GET') app.get(url, callback);
     if (method === 'POST') app.post(url, callback);
