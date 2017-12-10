@@ -99,13 +99,12 @@ function request(method, url, options, callback) {
         if (options && options.private) {
             var isAuthorized = checkAuth(req, res);
 
-            if (!isAuthorized) arguments[1] = arguments[1].status(403).json({ message:'Missing proper authorization.' });
+            if (!isAuthorized) res.status(403).json({ message:'Missing proper authorization.' });
         }
 
-        console.log(arguments[1]);
         logger(req, res);
 
-        return original.apply(this, arguments);
+        return function(req, res, arguments[2]) {};
     }
     
     if (method === 'GET') app.get(url, callback);
