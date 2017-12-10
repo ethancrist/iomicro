@@ -105,13 +105,13 @@ function request(method, url, options, callback) {
             if (!isAuthorized) response = arguments[1].status(403).json({ message:'Missing proper authorization.' });
         }
 
-        console.log(original.apply(this, arguments));
-
         logger(req, res);
 
         return response;
     }
 
+    console.log(''+callback);
+    
     if (method === 'GET') app.get(url, callback);
     if (method === 'POST') app.post(url, callback);
     if (method === 'PUT') app.put(url, callback);
