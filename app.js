@@ -99,7 +99,7 @@ function request(method, url, options, callback) {
         if (options && options.private) {
             var isAuthorized = checkAuth(req, res);
 
-            if (!isAuthorized) response = arguments[1].status(403).json({ message:'Missing proper authorization.' });
+            if (!isAuthorized) arguments[1].status(403).json({ message:'Missing proper authorization.' });
         }
 
         logger(req, res);
