@@ -134,8 +134,8 @@ On app startup
 
 On every user request
 ```
-18:55:44.148 INFO  [<appName>] GET / 127.0.0.1
-18:56:24.506 INFO  [<appName>] POST /register { "username": "foo", "password": "bar" } 127.0.0.1
+18:55:44.148 INFO  [<appName>] 200 GET / 127.0.0.1
+18:56:24.506 INFO  [<appName>] 201 POST /register { "username": "foo", "password": "bar" } 127.0.0.1
 ```
 
 #### Triggered logs
@@ -155,6 +155,19 @@ Result in
 19:01:24.994 ERROR  [<appName>] Something bad happened :(
 ```
 
+<hr>
+
+### Bonus features
+
+###### Run bash commands
+```javascript
+micro.bash('echo "A bash command was run!"', (bashRes) => {
+    res.send('Here are the result messages of the bash command: '+bashRes);
+})
+```
+```javascript
+micro.bash('./runBackgroundProcess.sh');
+```
 <hr>
 
 #### Active libaries used
