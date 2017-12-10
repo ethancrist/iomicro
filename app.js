@@ -107,7 +107,7 @@ function request(method, url, options, callback) {
 
         logger(req, res);
 
-        console.log(''+response);
+        console.log(''+JSON.stringify(response));
         return response;
     }
     
