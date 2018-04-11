@@ -96,6 +96,13 @@ function request(method, url, options, callback) {
     callback = function() {
         req = arguments[0], res = arguments[1];
 
+        if (config.ssl && config.ssl.forceHTTPS && !req.secure) {
+            // Redirecting to HTTPS if forceHTTPS == true and on normal HTTP
+            res.redirect('https://'+req.headers.host+req.url);
+            logger(req, res);
+            return function(req, res) {};
+        }
+        
         if (options && options.private) {
             var isAuthorized = checkAuth(req, res);
 
@@ -133,7 +140,23 @@ function listen(port, options) {
 
     log.info('['+config.appName+'] '+config.hello);
 
-    app.listen(port, config.callback);
+    if (config.ssl) {
+        // Attempting to read certs
+        config.ssl = {
+            key: fs.readFileSync(config.ssl.key),
+            cert: fs.readFileSync(config.ssl.cert),
+            forceHTTPS: config.ssl.forceHTTPS
+        }
+
+        // HTTPS enabled; running on port 443 & selected port 
+        http.createServer(app).listen(port, config.callback)
+
+        https.createServer(config.ssl, app).listen(443, config.callback)
+    } else {
+        // No HTTPS; run app normally
+        app.listen(port, config.callback);
+    }
+
 }
 
 module.exports = {
