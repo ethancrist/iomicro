@@ -18,7 +18,7 @@ micro.get('/', { private: true }, (req, res) => {
     res.render('home', { title: 'Home' });
 });
 
-micro.listen(3000, { appName: 'My App' hello: 'The app is now online.' }); 
+micro.listen(3000, { appName: 'My App', hello: 'The app is now online.', ssl: { key: '/path/to/key.pem', cert: '/path/to/cert.pem', forceHTTPS: true } }); 
 ```
 This tiny app will do all of the following:
 * Run an express app on port 3000
@@ -46,11 +46,19 @@ No options are required, and can be ommitted entirely as a parameter.
 micro.listen(3000, {
     appName: 'Microservice', // The name of your app.
     hello: 'The app is now online.' // The message logged when the app starts up.
+    ssl: {
+        key: '/path/to/key.pem', // Path to your SSL key
+        cert: '/path/to/cert.pem', // Path to your SSL cert
+        forceHTTPS: true // Will auto-redirect all non-HTTPS requests to HTTPS.
+    },
     logDir: 'logs', // The relative folder the logs are dumped to.
     viewDir: 'views', // The relative folder that res.render uses.
     callback: function() {} // A custom function to be run on startup.
 });
 ```
+##### A note on HTTPS
+If the ```ssl``` object is passed through with paths to a key and cert, an HTTPS server will automatically run on port 443 alongside your other port specified. 
+
 
 #### Function-specific options
 ```javascript
