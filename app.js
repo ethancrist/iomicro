@@ -7,7 +7,8 @@
 'use strict';
 
 // [DEPENDENCIES]
-const app = require('express')();
+const express = require('express')();
+const app = express();
 var log = require('simple-node-logger');
 const bodyParser = require('body-parser');
 const dots = require('express-dot-engine');
@@ -169,6 +170,7 @@ module.exports = {
     error: function(message) { log.error('['+config.appName+'] '+message) },
 
     // express
+    express: express,
     get: endpoint.get,
     post: endpoint.post,
     put: endpoint.put,
