@@ -24,6 +24,7 @@ micro.listen(3000, { appName: 'My App', hello: 'The app is now online.', ssl: { 
 ```
 This tiny app will do all of the following:
 * Run an express app on port 3000
+* Use HTTPS with SSL certificate and key passed through
 * Log all requests and responses to the console and a log file asynchronously 
 * Expose the URL *only* to users who pass an access key specified on startup
 * Render fast, dynamic pages using [dotJS](http://olado.github.io/doT)
@@ -41,7 +42,7 @@ const micro = require('iomicro');
 <hr>
 
 ### Options
-No options are required, and can be ommitted entirely as a parameter.
+No options are required, and can be omitted entirely as a parameter.
 
 #### Global options
 ```javascript
@@ -59,7 +60,7 @@ micro.listen(3000, {
 });
 ```
 ##### A note on HTTPS
-If the ```ssl``` object is passed through with paths to a key and cert, an HTTPS server will automatically run on port 443 alongside your other port specified. 
+If the `ssl` object is passed through with paths to a key and cert, an HTTPS server will automatically run instead of normal HTTP.
 
 
 #### Function-specific options
@@ -90,6 +91,16 @@ micro.get('/api/users', { private: true }, (req, res) => {
 micro.post('apps/app', (req, res) => {
     res.send('You posted: '+req.body)
 });
+```
+
+Expose files such as JS or CSS files
+```javascript
+micro.static('/files', 'localDir')
+```
+
+Expose files at endpoint `files` with [express static options](https://expressjs.com/en/api.html#express.static)
+```javascript
+micro.static('/files', 'localDir', options)
 ```
 
 <hr>

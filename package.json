@@ -1,39 +1,67 @@
 {
-  "name": "iomicro",
-  "version": "1.4.6",
+  "_from": "iomicro@^1.4.5",
+  "_id": "iomicro@1.4.7",
+  "_inBundle": false,
+  "_integrity": "sha1-PyKy9yb7a3bT6tRGckIYSQVGIjM=",
+  "_location": "/iomicro",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "iomicro@^1.4.5",
+    "name": "iomicro",
+    "escapedName": "iomicro",
+    "rawSpec": "^1.4.5",
+    "saveSpec": null,
+    "fetchSpec": "^1.4.5"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.4.7.tgz",
+  "_shasum": "3f22b2f726fb6b76d3ead4467242184905462233",
+  "_spec": "iomicro@^1.4.5",
+  "_where": "/var/dev/projects/paperweight/src/dev",
+  "author": {
+    "name": "ethancrist"
+  },
+  "bugs": {
+    "url": "https://github.com/ethancrist/iomicro/issues"
+  },
+  "bundleDependencies": [
+    "body-parser",
+    "express",
+    "express-dot-engine",
+    "request-ip",
+    "simple-node-logger"
+  ],
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.2",
+    "express": "^4.16.2",
+    "express-dot-engine": "^1.0.7",
+    "request-ip": "^2.0.2",
+    "simple-node-logger": "^0.93.33"
+  },
+  "deprecated": false,
   "description": "A simple, powerful way to create microservices in node.",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ethancrist/iomicro.git"
-  },
+  "homepage": "https://github.com/ethancrist/iomicro#readme",
   "keywords": [
     "microservice",
     "micro",
     "service",
     "library"
   ],
-  "author": "ethancrist",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ethancrist/iomicro/issues"
+  "main": "app.js",
+  "name": "iomicro",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethancrist/iomicro.git"
   },
-  "homepage": "https://github.com/ethancrist/iomicro#readme",
-  "dependencies": {
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "express-dot-engine": "^1.0.7",
-    "request-ip": "^2.0.2",
-    "simple-node-logger": "^0.93.33"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bundledDependencies": [
-    "body-parser",
-    "express",
-    "express-dot-engine",
-    "request-ip",
-    "simple-node-logger"
-  ]
+  "version": "1.4.8"
 }

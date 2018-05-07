@@ -33,6 +33,45 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(requestIp.mw());
 
+
+// [UTIL]
+function setOptions(defaultOptions, options) {
+    /**
+     * @webcore Core.setOptions [function]
+     * @purpose Merge two objects that may or may not overlap where the options override the default but the default are a fallback if an option wasn't set.
+     * @usage ```javascript
+     *        Core.setOptions({ unsetOption: 'defaultValue', otherOption: 'defaultValue' }, { otherOption: 'set' })
+     *        ```
+     * @returns Type: `Object`
+     *          ```javascript
+     *          { unsetOption: 'defaultValue', otherOption: 'set' }
+     *          ```
+     **/
+    if (options === undefined) options = {};
+
+    var newOptions = {};
+    for (var i = 0; i < Object.keys(defaultOptions).length; i++) {
+        // { "thisKey": "thisValue" } <= Looping through the entire object like this, treating as an array
+        var thisKey = Object.keys(defaultOptions)[i];
+        var defaultValue = defaultOptions[thisKey];
+
+        var allOptionsUnset = options === undefined || options === null;
+        var thisOptionUnset = options[thisKey] === undefined || options[thisKey] === null || options[thisKey] === '';
+
+        // Falling back to default if not set, overriding the default if set
+        if (allOptionsUnset || thisOptionUnset) {
+            // This option wasn't set; falling back to default
+            newOptions[thisKey] = defaultValue;
+        } else {
+            // This option was set; not using default
+            newOptions[thisKey] = options[thisKey];
+        }
+    };
+    // The result: an object that need not any if statements to check if null
+    return newOptions
+}
+
+
 // [ESSENTIALS]
 function prepare() {
     initViewEngine();
@@ -40,11 +79,38 @@ function prepare() {
     app.ready = true;
 }
 function runBash(command, callback) {
+    /**
+     * @purpose Run a bash command.
+     **/
     var response = "";
     exec(command, function(err, stdout, stderr) {
         err ? response =  err : response = stdout+stderr; 
         if (callback) callback(response);
     });
+}
+function microStatic(endpoint, localDir, options) {
+    /**
+     * @P.S. Do you like micro-static filters?
+     * @purpose Expose files via express.static
+     * @usage micro.static('/endpoint', 'local/dir', options)
+     * @options ##### `minify`
+     *          Type: `Boolean` Default: `false`
+     *          Minify all files automagically when they are exposed for faster performance.
+     **/
+    var defaultOptions = {
+        minify: false
+    }
+    //options = setOptions(defaultOptions, options)
+    if (!options) options = {};
+
+    if (options.minify) {
+        log.info('[iomicro] Minifying and compressing all files exposed to '+endpoint)
+
+        //var compression = require('compression')
+        //app.use(compression())
+    }
+
+    app.use(endpoint, express.static(localDir, options))
 }
 function initViewEngine() {
     if (!fs.existsSync(config.viewDir)) fs.mkdirSync(config.viewDir);
@@ -151,10 +217,12 @@ function listen(port, options) {
             forceHTTPS: config.ssl.forceHTTPS
         }
 
-        // HTTPS enabled; running on port 443 & selected port 
-        http.createServer(app).listen(port, config.callback)
-
-        https.createServer(config.ssl, app).listen(443, config.callback)
+        // HTTPS enabled; using SSL
+        if (config.ssl.forceHTTPS) {
+            // Catching all port 80s on HTTP and redirecting to HTTPS
+            //http.createServer(app).listen(80, config.callback)
+        }
+        https.createServer(config.ssl, app).listen(port, config.callback)
     } else {
         // No HTTPS; run app normally
         app.listen(port, config.callback);
@@ -175,6 +243,8 @@ module.exports = {
     post: endpoint.post,
     put: endpoint.put,
     delete: endpoint.delete,
+
     use: endpoint.use,
+    static: microStatic,
     listen: listen
 };
