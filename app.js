@@ -7,12 +7,12 @@
 'use strict';
 
 // [DEPENDENCIES]
-const express = require('express');
-const app = express();
-var log = require('simple-node-logger');
-const bodyParser = require('body-parser');
-const dots = require('express-dot-engine');
-const path = require('path');
+const express = require('express')
+const app = express()
+var log = require('simple-node-logger')
+const bodyParser = require('body-parser')
+const dots = require('express-dot-engine')
+const path = require('path')
 const http = require('http')
 const https = require('https')
 const fs = require('fs');
@@ -74,9 +74,10 @@ function setOptions(defaultOptions, options) {
 
 // [ESSENTIALS]
 function prepare() {
-    initViewEngine();
-    initLogs();
-    app.ready = true;
+    if (app.ready) return
+    app.ready = true
+    initViewEngine()
+    initLogs()
 }
 function runBash(command, callback) {
     /**
@@ -114,6 +115,7 @@ function microStatic(endpoint, localDir, options) {
 }
 function initViewEngine() {
     if (!fs.existsSync(config.viewDir)) fs.mkdirSync(config.viewDir);
+
     app.engine('dot', dots.__express);
     app.set('views', path.join('./'+config.viewDir));
     app.set('view engine', 'dot');
@@ -151,11 +153,11 @@ function logger(req, res) {
     log.info('['+config.appName+'] '+res.statusCode+' '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
 }
 function request(method, url, options, callback) {
-    if (!app.ready) prepare();
+    if (!app.ready) prepare()
 
     if (typeof(options) === 'function') {
-        callback = options;
-        options = null;
+        callback = options
+        options = null
     }
 
     var req, res;
@@ -203,9 +205,9 @@ var endpoint = {
 };
 
 function listen(port, options) {
-    //if (!port) return log.error('[Microservice] ERROR: You must specify a port when listening.');
+    config = Object.assign(config, options)
     
-    config = Object.assign(config, options);
+    prepare()
 
     log.info('['+config.appName+'] '+config.hello);
 
