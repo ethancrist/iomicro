@@ -153,8 +153,6 @@ function logger(req, res) {
     log.info('['+config.appName+'] '+res.statusCode+' '+req.method+' '+req.originalUrl+' '+user.post+user.ip);
 }
 function request(method, url, options, callback) {
-    if (!app.ready) prepare()
-
     if (typeof(options) === 'function') {
         callback = options
         options = null
