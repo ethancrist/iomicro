@@ -183,8 +183,11 @@ Result in
 
 ###### Run bash commands
 ```javascript
-micro.bash('echo "A bash command was run!"', (bashRes) => {
-    res.send('Here are the result messages of the bash command: '+bashRes);
+// Utilizing Promise resolve and rejects
+micro.bash('echo "A bash command was run!"').then((bashRes) => {
+    micro.log(bashRes);
+}, (bashErr) => {
+    micro.error(bashRes);
 })
 ```
 ```javascript

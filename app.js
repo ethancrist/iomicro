@@ -77,15 +77,15 @@ function prepare() {
     app.ready = true
     initLogs()
 }
-function runBash(command, callback) {
+function runBash(command) {
     /**
-     * @purpose Run a bash command.
+     * @purpose Run a bash command wrapped in a Promise.
      **/
-    var response = "";
-    exec(command, function(err, stdout, stderr) {
-        err ? response =  err : response = stdout+stderr; 
-        if (callback) callback(response);
-    });
+    return new Promise(function(resolve, reject) {
+        exec(command, function(err, stdout, stderr) {
+            err ? reject(err) : resolve(stdout+stderr); 
+        })
+    })
 }
 function microStatic(endpoint, localDir, options) {
     /**
