@@ -24,8 +24,7 @@ var config = {
     appName: 'Microservice',
     hello: 'The app is now online.',
     logDir: 'logs',
-    viewDir: 'views',
-    callback: function() {} 
+    viewDir: 'views'
 };
 
 // [MIDDLEWARE]
@@ -76,7 +75,6 @@ function setOptions(defaultOptions, options) {
 function prepare() {
     if (app.ready) return
     app.ready = true
-    initViewEngine()
     initLogs()
 }
 function runBash(command, callback) {
@@ -204,8 +202,8 @@ var endpoint = {
 
 function listen(port, options) {
     config = Object.assign(config, options)
-    
-    prepare()
+
+    initViewEngine()
 
     log.info('['+config.appName+'] '+config.hello);
 
@@ -222,29 +220,40 @@ function listen(port, options) {
             // Catching all port 80s on HTTP and redirecting to HTTPS
             //http.createServer(app).listen(80, config.callback)
         }
-        https.createServer(config.ssl, app).listen(port, config.callback)
-    } else {
-        // No HTTPS; run app normally
-        app.listen(port, config.callback);
+
+        // Starting this secure puppy up
+        return new Promise(function(resolve, reject) {
+            https.createServer(config.ssl, app).listen(port, resolve)
+        })
     }
+
+    // No HTTPS; run app normally
+    return new Promise(function(resolve, reject) {
+        app.listen(port, resolve);
+    })
 
 }
 
-module.exports = {
-    bash: runBash,
+// [EXPORTS]
+var Micro = function() {
+    /**
+     * @purpose Initialize.
+     **/
+    prepare()
+}
+Micro.prototype.bash = runBash
+Micro.prototype.log = function(message) { log.info('['+config.appName+'] '+message) }
+Micro.prototype.error = function(message) { log.error('['+config.appName+'] '+message) }
 
-    // simple-node-logger
-    log: function(message) { log.info('['+config.appName+'] '+message) },
-    error: function(message) { log.error('['+config.appName+'] '+message) },
+// Bad for performance, should be a getter if anything. Deprecating for now
+//Micro.prototype.express = express
 
-    // express
-    express: express,
-    get: endpoint.get,
-    post: endpoint.post,
-    put: endpoint.put,
-    delete: endpoint.delete,
+Micro.prototype.get = endpoint.get
+Micro.prototype.post = endpoint.post
+Micro.prototype.put = endpoint.put
+Micro.prototype.delete = endpoint.delete
+Micro.prototype.use = endpoint.use
+Micro.prototype.static = microStatic
+Micro.prototype.listen = listen
 
-    use: endpoint.use,
-    static: microStatic,
-    listen: listen
-};
+module.exports = new Micro()

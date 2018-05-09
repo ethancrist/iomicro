@@ -56,7 +56,8 @@ micro.listen(3000, {
     },
     logDir: 'logs', // The relative folder the logs are dumped to.
     viewDir: 'views', // The relative folder that res.render uses.
-    callback: function() {} // A custom function to be run on startup.
+}).then(function() {
+    console.log('Server is good to go!')
 });
 ```
 ##### A note on HTTPS
