@@ -256,4 +256,12 @@ Micro.prototype.use = endpoint.use
 Micro.prototype.static = microStatic
 Micro.prototype.listen = listen
 
+Micro.prototype.socket = function(options) {
+    /**
+     * @purpose Run a websocket.
+     **/
+    const WebSocket = require('ws')
+    return new WebSocket.Server(options)
+}
+
 module.exports = new Micro()

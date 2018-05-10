@@ -181,6 +181,11 @@ Result in
 
 ### Bonus features
 
+###### Run a websocket
+```javascript
+const socket = micro.socket({ port: 8080 })
+```
+
 ###### Run bash commands
 ```javascript
 // Utilizing Promise resolve and rejects

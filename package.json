@@ -1,28 +1,28 @@
 {
-  "_from": "iomicro@^1.4.5",
-  "_id": "iomicro@1.4.7",
+  "_from": "iomicro@^1.4.7",
+  "_id": "iomicro@1.5.1",
   "_inBundle": false,
-  "_integrity": "sha1-PyKy9yb7a3bT6tRGckIYSQVGIjM=",
+  "_integrity": "sha512-h5HCcFjPDel83LeAyxtsRI9GmG84oYmVl0LGSwR2Mb0yz/lioFnx8oXVZjVzZ93g+y1Mej9a5xTljd38ngni9w==",
   "_location": "/iomicro",
   "_phantomChildren": {},
   "_requested": {
     "type": "range",
     "registry": true,
-    "raw": "iomicro@^1.4.5",
+    "raw": "iomicro@^1.4.7",
     "name": "iomicro",
     "escapedName": "iomicro",
-    "rawSpec": "^1.4.5",
+    "rawSpec": "^1.4.7",
     "saveSpec": null,
-    "fetchSpec": "^1.4.5"
+    "fetchSpec": "^1.4.7"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.4.7.tgz",
-  "_shasum": "3f22b2f726fb6b76d3ead4467242184905462233",
-  "_spec": "iomicro@^1.4.5",
-  "_where": "/var/dev/projects/paperweight/src/dev",
+  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.5.1.tgz",
+  "_shasum": "a46ea47c0c271bb0e86fef37b33e61c26d90527d",
+  "_spec": "iomicro@^1.4.7",
+  "_where": "/home/ethan/dev/projects/paperweight/src/dev/server",
   "author": {
     "name": "ethancrist"
   },
@@ -42,7 +42,8 @@
     "express": "^4.16.2",
     "express-dot-engine": "^1.0.7",
     "request-ip": "^2.0.2",
-    "simple-node-logger": "^0.93.33"
+    "simple-node-logger": "^0.93.33",
+    "ws": "^5.1.1"
   },
   "deprecated": false,
   "description": "A simple, powerful way to create microservices in node.",
@@ -63,5 +64,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.5.0"
+  "version": "1.5.2"
 }
