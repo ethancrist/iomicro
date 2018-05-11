@@ -271,7 +271,7 @@ Micro.prototype.socket = function(options) {
 
         const wss = new WebSocket.Server({ server });
 
-        server.listen(options.port, function() { console.log('Madness') });
+        server.listen(options.port);
 
         return wss
     }

@@ -1,8 +1,8 @@
 {
   "_from": "iomicro",
-  "_id": "iomicro@1.5.3",
+  "_id": "iomicro@1.5.5",
   "_inBundle": false,
-  "_integrity": "sha512-ZPMCtMHQYH/E6THGxtSfJVjfcs8q7XiUkbf2gdhQKRbWynq8TDPbGqkFGmET4fTo5kn94CCJGgsFokEurMCPoQ==",
+  "_integrity": "sha512-/Oy3aDpX6zPjhgT+sRdLXiS5dHgpkMrRKICb/hmq2Usv0Om8kNJutN9Y0wfmU/5g0exv0e4w4K39jyEgD5zmww==",
   "_location": "/iomicro",
   "_phantomChildren": {},
   "_requested": {
@@ -19,8 +19,8 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.5.3.tgz",
-  "_shasum": "a59fbd39a6c1fc018438b07ccd5f1b90bd9c46bf",
+  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.5.5.tgz",
+  "_shasum": "164fa8b3204e372cf28d72005f6d56f1aa615c29",
   "_spec": "iomicro",
   "_where": "/var/dev/projects/paperweight/src/portal",
   "author": {
@@ -64,5 +64,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.5.4"
+  "version": "1.5.5"
 }
