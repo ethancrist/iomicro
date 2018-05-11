@@ -261,6 +261,22 @@ Micro.prototype.socket = function(options) {
      * @purpose Run a websocket.
      **/
     const WebSocket = require('ws')
+
+    if (options.ssl) {
+        // Preparing secure websocket server with cert and key passed
+        const server = new https.createServer({
+            key: fs.readFileSync(options.ssl.key),
+            cert: fs.readFileSync(options.ssl.cert)
+        });
+
+        const wss = new WebSocket.Server({ server });
+
+        server.listen(options.port, function() { console.log('Madness') });
+
+        return wss
+    }
+
+    // No SSL was passed; starting insecure websocket server
     return new WebSocket.Server(options)
 }
 

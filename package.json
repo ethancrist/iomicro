@@ -1,28 +1,28 @@
 {
-  "_from": "iomicro@^1.4.7",
-  "_id": "iomicro@1.5.1",
+  "_from": "iomicro",
+  "_id": "iomicro@1.5.3",
   "_inBundle": false,
-  "_integrity": "sha512-h5HCcFjPDel83LeAyxtsRI9GmG84oYmVl0LGSwR2Mb0yz/lioFnx8oXVZjVzZ93g+y1Mej9a5xTljd38ngni9w==",
+  "_integrity": "sha512-ZPMCtMHQYH/E6THGxtSfJVjfcs8q7XiUkbf2gdhQKRbWynq8TDPbGqkFGmET4fTo5kn94CCJGgsFokEurMCPoQ==",
   "_location": "/iomicro",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "tag",
     "registry": true,
-    "raw": "iomicro@^1.4.7",
+    "raw": "iomicro",
     "name": "iomicro",
     "escapedName": "iomicro",
-    "rawSpec": "^1.4.7",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "^1.4.7"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.5.1.tgz",
-  "_shasum": "a46ea47c0c271bb0e86fef37b33e61c26d90527d",
-  "_spec": "iomicro@^1.4.7",
-  "_where": "/home/ethan/dev/projects/paperweight/src/dev/server",
+  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.5.3.tgz",
+  "_shasum": "a59fbd39a6c1fc018438b07ccd5f1b90bd9c46bf",
+  "_spec": "iomicro",
+  "_where": "/var/dev/projects/paperweight/src/portal",
   "author": {
     "name": "ethancrist"
   },
@@ -64,5 +64,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.5.2"
+  "version": "1.5.4"
 }

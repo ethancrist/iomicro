@@ -181,9 +181,22 @@ Result in
 
 ### Bonus features
 
-###### Run a websocket
+###### Run a websocket using [ws](https://github.com/websockets/ws)
 ```javascript
 const socket = micro.socket({ port: 8080 })
+
+socket.on('connection', function() {
+    micro.log('User connected via websocket')
+})
+```
+```javascript
+const secureSocket = micro.socket({
+    port: 8080,
+    ssl: {
+        cert: '/path/to/cert.pem',
+        key: '/path/to/key.pem'
+    }
+}) 
 ```
 
 ###### Run bash commands
