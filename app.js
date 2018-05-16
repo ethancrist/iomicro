@@ -245,11 +245,11 @@ var Micro = function() {
     this.error = function(message) { log.error('['+config.appName+'] '+message) }
 
     // Bad for performance, should be a getter if anything. Deprecating for now
-    //Micro.prototype.express = express
+    //this.express = express
 
     this.get = endpoint.get
-    this.prototype.post = endpoint.post
-    this.prototype.put = endpoint.put
+    this.post = endpoint.post
+    this.put = endpoint.put
     this.delete = endpoint.delete
     this.use = endpoint.use
     this.static = microStatic
