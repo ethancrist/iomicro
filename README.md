@@ -63,6 +63,8 @@ micro.listen(3000, {
 ##### A note on HTTPS
 If the `ssl` object is passed through with paths to a key and cert, an HTTPS server will automatically run instead of normal HTTP.
 
+Additionally, if `forceHTTPS` is `true`, an HTTP server will automatically spin up on port 80 redirecting requests to the HTTPS server on the port you passed through.
+
 
 #### Function-specific options
 ```javascript

@@ -218,7 +218,7 @@ function listen(port, options) {
         // HTTPS enabled; using SSL
         if (config.ssl.forceHTTPS) {
             // Catching all port 80s on HTTP and redirecting to HTTPS
-            //http.createServer(app).listen(80, config.callback)
+            http.createServer(app).listen(80, config.callback)
         }
 
         // Starting this secure puppy up
@@ -240,44 +240,44 @@ var Micro = function() {
      * @purpose Initialize.
      **/
     prepare()
-}
-Micro.prototype.bash = runBash
-Micro.prototype.log = function(message) { log.info('['+config.appName+'] '+message) }
-Micro.prototype.error = function(message) { log.error('['+config.appName+'] '+message) }
+    this.bash = runBash
+    this.log = function(message) { log.info('['+config.appName+'] '+message) }
+    this.error = function(message) { log.error('['+config.appName+'] '+message) }
 
-// Bad for performance, should be a getter if anything. Deprecating for now
-//Micro.prototype.express = express
+    // Bad for performance, should be a getter if anything. Deprecating for now
+    //Micro.prototype.express = express
 
-Micro.prototype.get = endpoint.get
-Micro.prototype.post = endpoint.post
-Micro.prototype.put = endpoint.put
-Micro.prototype.delete = endpoint.delete
-Micro.prototype.use = endpoint.use
-Micro.prototype.static = microStatic
-Micro.prototype.listen = listen
+    this.get = endpoint.get
+    this.prototype.post = endpoint.post
+    this.prototype.put = endpoint.put
+    this.delete = endpoint.delete
+    this.use = endpoint.use
+    this.static = microStatic
+    this.listen = listen
 
-Micro.prototype.socket = function(options) {
-    /**
-     * @purpose Run a websocket.
-     **/
-    const WebSocket = require('ws')
+    this.socket = function(options) {
+        /**
+         * @purpose Run a websocket.
+         **/
+        const WebSocket = require('ws')
 
-    if (options.ssl) {
-        // Preparing secure websocket server with cert and key passed
-        const server = new https.createServer({
-            key: fs.readFileSync(options.ssl.key),
-            cert: fs.readFileSync(options.ssl.cert)
-        });
+        if (options.ssl) {
+            // Preparing secure websocket server with cert and key passed
+            const server = new https.createServer({
+                key: fs.readFileSync(options.ssl.key),
+                cert: fs.readFileSync(options.ssl.cert)
+            });
 
-        const wss = new WebSocket.Server({ server });
+            const wss = new WebSocket.Server({ server });
 
-        server.listen(options.port);
+            server.listen(options.port);
 
-        return wss
+            return wss
+        }
+
+        // No SSL was passed; starting insecure websocket server
+        return new WebSocket.Server(options)
     }
-
-    // No SSL was passed; starting insecure websocket server
-    return new WebSocket.Server(options)
 }
 
 module.exports = new Micro()
