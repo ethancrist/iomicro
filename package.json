@@ -1,8 +1,8 @@
 {
   "_from": "iomicro",
-  "_id": "iomicro@1.5.5",
+  "_id": "iomicro@1.6.3",
   "_inBundle": false,
-  "_integrity": "sha512-/Oy3aDpX6zPjhgT+sRdLXiS5dHgpkMrRKICb/hmq2Usv0Om8kNJutN9Y0wfmU/5g0exv0e4w4K39jyEgD5zmww==",
+  "_integrity": "sha512-T822cBesl22G40gzi2MzAKu9gbHnnN/t2tlzhBLCAGpxarulttGZx726ojtu7I0Zniz5tNKQ8yjTlfGR4yOR/g==",
   "_location": "/iomicro",
   "_phantomChildren": {},
   "_requested": {
@@ -19,10 +19,10 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.5.5.tgz",
-  "_shasum": "164fa8b3204e372cf28d72005f6d56f1aa615c29",
+  "_resolved": "https://registry.npmjs.org/iomicro/-/iomicro-1.6.3.tgz",
+  "_shasum": "892ee0c8080b15f79456f388920a1f672b46ce93",
   "_spec": "iomicro",
-  "_where": "/var/dev/projects/paperweight/src/portal",
+  "_where": "/home/ethan/dev/projects/paperweight/src/dev/paper-world",
   "author": {
     "name": "ethancrist"
   },
@@ -64,5 +64,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.6.2"
+  "version": "1.6.3"
 }

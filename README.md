@@ -46,7 +46,7 @@ No options are required, and can be omitted entirely as a parameter.
 
 #### Global options
 ```javascript
-micro.listen(3000, {
+const options = {
     appName: 'Microservice', // The name of your app.
     hello: 'The app is now online.' // The message logged when the app starts up.
     ssl: {
@@ -56,7 +56,13 @@ micro.listen(3000, {
     },
     logDir: 'logs', // The relative folder the logs are dumped to.
     viewDir: 'views', // The relative folder that res.render uses.
-}).then(function() {
+};
+
+// Initialize options after iomicro is loaded without starting up a server.
+micro.init(options)
+
+// Initialize options when the server begins to listen.
+micro.listen(3000, options).then(function() {
     console.log('Server is good to go!')
 });
 ```
@@ -192,13 +198,19 @@ socket.on('connection', function() {
 })
 ```
 ```javascript
+// Start a secure websocket using a global SSL certificate
+micro.init({ ssl: { cert: '/path/to/cert.pem', key: '/path/to/key.pem' } })
+const secureSocket = micro.socket({ port: 8080 }) 
+```
+```javascript
+// Start a secure websocket using a specific SSL certificate
 const secureSocket = micro.socket({
     port: 8080,
     ssl: {
         cert: '/path/to/cert.pem',
         key: '/path/to/key.pem'
     }
-}) 
+})
 ```
 
 ###### Run bash commands

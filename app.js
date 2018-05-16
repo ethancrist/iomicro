@@ -72,9 +72,12 @@ function setOptions(defaultOptions, options) {
 
 
 // [ESSENTIALS]
-function prepare() {
+function prepare(options) {
     if (app.ready) return
     app.ready = true
+
+    config = Object.assign(config, options)
+
     initLogs()
 }
 function runBash(command) {
@@ -201,7 +204,8 @@ var endpoint = {
 };
 
 function listen(port, options) {
-    config = Object.assign(config, options)
+    // Loading config on listen if not already initialized
+    if (options) prepare(options)
 
     initViewEngine()
 
@@ -239,7 +243,8 @@ var Micro = function() {
     /**
      * @purpose Initialize.
      **/
-    prepare()
+    this.init = prepare
+
     this.bash = runBash
     this.log = function(message) { log.info('['+config.appName+'] '+message) }
     this.error = function(message) { log.error('['+config.appName+'] '+message) }
@@ -261,11 +266,18 @@ var Micro = function() {
          **/
         const WebSocket = require('ws')
 
-        if (options.ssl) {
+        if (options.ssl || config.ssl) {
             // Preparing secure websocket server with cert and key passed
+            // Preferring to use options.ssl if it was passed,
+            // or if not, using one passed through on micro.init
+            //
+            //
+            var ssl = config.ssl
+            if (options.ssl) ssl = options.ssl
+
             const server = new https.createServer({
-                key: fs.readFileSync(options.ssl.key),
-                cert: fs.readFileSync(options.ssl.cert)
+                key: fs.readFileSync(ssl.key),
+                cert: fs.readFileSync(ssl.cert)
             });
 
             const wss = new WebSocket.Server({ server });
