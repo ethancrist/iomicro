@@ -164,6 +164,8 @@ function request(method, url, options, callback) {
     // Custom middleware
     var original = callback;
     callback = function() {
+        var requestLogged = false;
+
         req = arguments[0], res = arguments[1];
 
         if (config.ssl && config.ssl.forceHTTPS && !req.secure) {
@@ -183,8 +185,23 @@ function request(method, url, options, callback) {
             }
         }
 
+        // Only running the logger after they have initialized res.send
+        // This is to ensure that res.statusCode is guaranteed to be defined, in case
+        // their res.send is running in an async block of code.
+        var originalResSend = res.send;
+        res.send = function() {
+            // Running original Express res.send
+            originalResSend.apply(this, arguments);
+
+            // Logging data AFTER so res.statusCode can be included
+            if (!requestLogged) {
+                requestLogged = true;
+                logger(req, res);
+            }
+        } 
+
+        // Endpoint callback logic running...
         original.apply(this, arguments);
-        logger(req, res);
 
         return function(req, res) {};
     }
@@ -193,6 +210,7 @@ function request(method, url, options, callback) {
     if (method === 'POST') app.post(url, callback);
     if (method === 'PUT') app.put(url, callback);
     if (method === 'DELETE') app.delete(url, callback);
+    if (method === 'PATCH') app.patch(url, callback);
     if (method === 'USE') app.use(url, callback);
 }
 var endpoint = {
@@ -200,6 +218,7 @@ var endpoint = {
     post: function (url, options, callback) { request('POST', url, options, callback) },
     put: function (url, options, callback) { request('PUT', url, options, callback) },
     delete: function (url, options, callback) { request('DELETE', url, options, callback) },
+    patch: function (url, options, callback) { request('PATCH', url, options, callback) },
     use: function(url, options, callback) { request('USE', url, options, callback) }
 };
 
@@ -256,6 +275,7 @@ var Micro = function() {
     this.post = endpoint.post
     this.put = endpoint.put
     this.delete = endpoint.delete
+    this.patch = endpoint.patch
     this.use = endpoint.use
     this.static = microStatic
     this.listen = listen
