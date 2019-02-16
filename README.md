@@ -208,26 +208,25 @@ Result in
 ###### Encryption
 Be sure to use a very long, randomized, secure passphrase. Encryption uses the AES-256-CBC algorithm.
 
-Encrypt a raw text file
 ```javascript
-// Encrypt the raw text from raw.txt and save it to a file called new.hash with 'passphrase'
+// Encrypt 'raw.txt' and save it to 'new.hash' with 'passphrase'
 micro.encryptFile('raw.txt', 'new.hash', 'passphrase')
 ```
 
-Decrypt a ciphered text file
 ```javascript
+// Decrypt 'new.hash' into a raw string
 const rawText = micro.decryptFile('new.hash', 'passphrase')
 console.log(rawText) // Decrypted text from new.hash
 ```
 
-Encrypt a raw string
 ```javascript
+// Encrypt a raw string
 const cipher = micro.encrypt('I am raw text', 'passphrase')
 ```
 
-Decrypt a ciphered string
 ```javascript
-// 'I am raw text'
+// Decrypt a ciphered string
+// raw = 'I am raw text'
 const raw = micro.decrypt('969951219ead9191b832cb780f2c0967', 'passphrase')
 ```
 
