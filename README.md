@@ -20,13 +20,13 @@ micro.get('/', { private: true }, (req, res) => {
     res.render('home', { title: 'Home' });
 });
 
-micro.listen(3000, { appName: 'My App', hello: 'The app is now online.', ssl: { key: '/path/to/key.pem', cert: '/path/to/cert.pem', forceHTTPS: true } }); 
+micro.listen(3000, { appName: 'My App', hello: 'The app is now online.', apiKeysFile: 'api.keys', ssl: { key: '/path/to/key.pem', cert: '/path/to/cert.pem', forceHTTPS: true } }); 
 ```
 This tiny app will do all of the following:
 * Run an express app on port 3000
 * Use HTTPS with SSL certificate and key passed through
 * Log all requests and responses to the console and a log file asynchronously 
-* Expose the URL *only* to users who pass an access key specified on startup
+* Expose the URL *only* to users matching an API key you store in a secure file 
 * Render fast, dynamic pages using [dotJS](http://olado.github.io/doT)
 * JSONize POST request paramaters into ```req.body```
 
@@ -49,6 +49,7 @@ No options are required, and can be omitted entirely as a parameter.
 const options = {
     appName: 'Microservice', // The name of your app.
     hello: 'The app is now online.' // The message logged when the app starts up.
+    apiKeysFile: '/path/to/api.keys', // Path to your encrypted file containing API keys
     ssl: {
         key: '/path/to/key.pem', // Path to your SSL key
         cert: '/path/to/cert.pem', // Path to your SSL cert
@@ -76,18 +77,33 @@ Additionally, if `forceHTTPS` is `true`, an HTTP server will automatically spin 
 ```javascript
 micro.get('/api/users', { private: true }, getUsers);
 ```
-In order for ``` private: true ``` to work, pass through an access key on startup
-```javascript
-node app.js "myreallyreallyreallyreallylonghashedkey"
-node api.js "Bearer eylajs9x1m.wpz0jcmqo9askdmzioenosjhmdow22~o0cj"
-```
-This ensures that no keys will be immediately visible anywhere in your codebase.
+In order for ``` private: true ``` to work, you must:
 
-For the endpoints that have ``` private: true ``` it will then attempt to match said key with
+1) Create and [encrypt a file](#encryption) containing your API keys.
+        You can encrypt a raw file of keys using [micro.encryptFile](#encryption).
+        Each new line in the file will count as a new accepted API key.
+
+/path/to/api.keys (how it looks before encrypted)
+```
+first_api_key
+second_api_key
+etc
+```
+
+2) Make the ```apiKeysFile``` variable in options the relative location of this encrypted file as exampled above.
+3) On startup, send through the passphrase that was used to encrypt this file like the example below.
+
+```javascript
+API_KEYS_PHRASE="passphrase_that_was_used_to_encrypt_your_keys_file" node app.js
+```
+
+This ensures that no API keys will be immediately visible anywhere in your codebase.
+
+Now, for the endpoints that have ``` private: true ``` it will then attempt to match all API keys listed with both
 * The ```Authorization``` HTTP header, AKA ```req.headers.authorization```
 * User POST parameter ```authorization```, AKA ```req.body.authorization```
 
-###### I'm aware this feature is limited, and will likely add support for multiple or elastic keys in the future.
+This check will automatically occur every time for all ``` private: true ``` endpoints before any of your endpoint logic is run to serve as gatekeeping for users without a proper API key.
 <hr>
 
 ### Creating endpoints
@@ -189,6 +205,32 @@ Result in
 
 ### Bonus features
 
+###### Encryption
+Be sure to use a very long, randomized, secure passphrase. Encryption uses the AES-256-CBC algorithm.
+
+Encrypt a raw text file
+```javascript
+// Encrypt the raw text from raw.txt and save it to a file called new.hash with 'passphrase'
+micro.encryptFile('raw.txt', 'new.hash', 'passphrase')
+```
+
+Decrypt a ciphered text file
+```javascript
+const rawText = micro.decryptFile('new.hash', 'passphrase')
+console.log(rawText) // Decrypted text from new.hash
+```
+
+Encrypt a raw string
+```javascript
+const cipher = micro.encrypt('I am raw text', 'passphrase')
+```
+
+Decrypt a ciphered string
+```javascript
+// 'I am raw text'
+const raw = micro.decrypt('969951219ead9191b832cb780f2c0967', 'passphrase')
+```
+
 ###### Run a websocket using [ws](https://github.com/websockets/ws)
 ```javascript
 const socket = micro.socket({ port: 8080 })
@@ -233,3 +275,4 @@ micro.bash('./runBackgroundProcess.sh');
 ###### [express-dot-engine](https://www.npmjs.com/package/express-dot-engine)
 ###### [simple-node-logger](https://www.npmjs.com/package/simple-node-logger)
 ###### [request-ip](https://www.npmjs.com/package/request-ip)
+###### [crypto](https://www.npmjs.com/package/crypto)

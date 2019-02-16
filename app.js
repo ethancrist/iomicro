@@ -16,8 +16,11 @@ const path = require('path')
 const http = require('http')
 const https = require('https')
 const fs = require('fs');
-const requestIp = require('request-ip');
-const exec = require('child_process').exec;
+const requestIp = require('request-ip')
+const exec = require('child_process').exec
+const crypto = require('crypto')
+const algorithm = 'aes-256-cbc'
+var apiKeysCache = []
 
 // [OPTIONS]
 var config = {
@@ -132,14 +135,117 @@ function initLogs() {
 
     log.ready = true;
 }
-function checkAuth(req, res) {
-    if (!process.argv[2]) {
-        var message = '[iomicro] ERROR: In order to use { private: true }, send an access key like so: \n'+
-                      '         \'$ node app.js "reallyreallyreallyreallyreallyreallylonghashedkey"\'';
-        log.error(message);
-        return false;
+function encrypt(raw, passphrase) {
+    /**
+     * @purpose Encrypt raw text with a passphrase.
+     **/
+    try {
+        const cipher = crypto.createCipher(algorithm, passphrase)
+
+        let crypted = cipher.update(raw, 'utf8', 'hex')
+        crypted += cipher.final('hex')
+
+        return crypted
+    } catch {
+        log.error('[iomicro] Could not encrypt data, please try reformatting.')
+        return ''
     }
-    return req.headers.authorization === process.argv[2] || req.body.authorization === process.argv[2];
+
+}
+function decrypt(cipher, passphrase) {
+    /**
+     * @purpose Decrypt a cipher with a passphrase.
+     **/
+    try {
+        const decipher = crypto.createDecipher(algorithm, passphrase)
+
+        let dec = decipher.update(cipher, 'hex', 'utf8')
+        dec += decipher.final('utf8')
+
+        return dec
+    } catch {
+        log.error('[iomicro] Could not decrypt data, please check your passphrase.')
+        return ''
+    }
+}
+function encryptFile(rawFile, newFile, passphrase) {
+    /**
+     * @purpose Encrypt a raw file with a passphrase.
+     **/
+    const fileData = fs.readFileSync(rawFile, 'utf8')
+    const cipher = encrypt(fileData, passphrase)
+
+    // Writing the new encrypted data to the path given.
+    const writeStream = fs.createWriteStream(newFile)
+    writeStream.write(cipher)
+    writeStream.end()
+}
+function decryptFile(file, passphrase) {
+    /**
+     * @purpose Decrypt a file contents with a passphrase.
+     * @return String of file contents.
+     **/
+    const fileData = fs.readFileSync(file, 'utf8')
+
+    // Returning file contents as a string.
+    return decrypt(fileData, passphrase)
+}
+function initApiKeys() {
+    /**
+     * @purpose Read encrypted API keys file, decrypt it and store API keys in an array.
+     * @return Array of decrypted API keys.
+     **/
+    const apiKeyPhrase = process.env.API_KEYS_PHRASE
+ 
+    // No API key file or API key passsphrase were specified; api keys cannot be decrypted.
+    if (!config.apiKeysFile || !apiKeyPhrase) return []
+
+    if (apiKeysCache.length > 0) return apiKeysCache
+
+        log.info('[iomicro] Decrypting API keys file, and updating its cache...')
+    // API keys cache did not exist; decrypting API keys file given with API key phrase given and storing it into the cache.
+    const apiKeysFileContent = decryptFile(config.apiKeysFile, apiKeyPhrase)
+
+    // Each new line within the API keys file is a new index in the API keys cache array.
+    apiKeysCache = apiKeysFileContent.split('\n')
+    apiKeysCache = apiKeysCache.filter((blacklist) => { return blacklist !== ''})
+
+    // Returning the array of decrypted API keys.
+    return apiKeysCache
+}
+function checkAuth(req, res) {
+    /**
+     * @purpose Gatekeeping users for { private: true } endpoints, ensuring they have proper API keys.
+     * @usage Only called as middleware for { private: true } endpoints.
+     **/
+    let authIsValid = false
+
+    // Either no API key file or API key phrase was specified; blocking all users from this endpoint.
+    if (!config.apiKeysFile || !process.env.API_KEYS_PHRASE) {
+        const message = '[iomicro] In order to use { private: true }, you must do the following: \n'+
+                      '                                 1) Create and encrypt a file containing your API keys.\n'+
+                      '                                         You can encrypt a raw file of keys using micro.encryptFile.\n'+
+                      '                                         Each new line in the file will count as a new accepted API key.\n'+
+                      '                                 2) Make the <apiKeysFile> variable in options the relative location of this encrypted file.\n'+
+                      '                                 3) On startup, send through the passphrase that was used to encrypt this file like so:\n'+
+                      '                                        \'$ API_KEYS_PHRASE="passphrase_that_was_used_to_encrypt_your_keys_file" node app.js\'\n'+
+                      '                                 See the implementation documentation for more information.\n'+
+                      '                                 For now, all attempts at accessing { private: true } endpoints will be 403 Forbidden.'
+
+        log.error(message)
+        return authIsValid
+    }
+
+    const decryptedApiKeys = initApiKeys()
+
+    // If the key sent in the Authorization header or request body field "authorization" === any API key, then the auth is valid!
+    for (let i = 0, len = decryptedApiKeys.length; i < len; i++) {
+        const key = decryptedApiKeys[i]
+        authIsValid = req.headers.authorization === key || req.body.authorization === key
+
+        if (authIsValid) return authIsValid
+    }
+    return authIsValid
 }
 function logger(req, res) {
     // Logging after response is sent
@@ -227,6 +333,7 @@ function listen(port, options) {
     if (options) prepare(options)
 
     initViewEngine()
+    initApiKeys()
 
     log.info('['+config.appName+'] '+config.hello);
 
@@ -279,6 +386,11 @@ var Micro = function() {
     this.use = endpoint.use
     this.static = microStatic
     this.listen = listen
+
+    this.encrypt = encrypt
+    this.decrypt = decrypt
+    this.encryptFile= encryptFile
+    this.decryptFile= decryptFile
 
     this.socket = function(options) {
         /**
